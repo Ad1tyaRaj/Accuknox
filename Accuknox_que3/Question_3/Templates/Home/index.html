@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Snippet Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Accuknox Questions 1</h1>
+        <p>Below code snippet:</p>
+        <h2>Hit this Url</h2><h3>http://127.0.0.1:8000/admin</h3>
+        <h3>Username:admin</h3>
+        <h3>Password:admin</h3>
+
+        <pre>
+            <code>
+from django.db import models, transaction
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+#this code is models.py
+class MyModel(models.Model):
+    name = models.CharField(max_length=100)
+
+# this code is signals.py
+@receiver(post_save, sender=MyModel)
+def mymodel_post_save(sender, instance, **kwargs):
+    print(f"Signal handler executed! Instance: {instance.name}")
+
+
+                #this code is comment out in signal.py
+# Test function
+def test_signal_transaction():
+    try:
+        with transaction.atomic():
+
+            obj = MyModel(name="Test Object")
+            obj.save()  # This will trigger the post_save signal
+
+
+            raise Exception("Forcing a rollback")
+    except Exception as e:
+        print(f"Exception caught: {e}")
+
+
+    if MyModel.objects.filter(name="Test Object").exists():
+        print("Object exists in the database!")
+    else:
+        print("Object does not exist in the database.")
+
+# Run the test
+test_signal_transaction()
+            </code>
+        </pre>
+    </div>
+
+</body>
+</html>
